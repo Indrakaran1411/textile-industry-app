@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antigravity Textile ERP & PLM Control Center</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Advanced textile enterprise control deck with real-time logistics tracking, product lifecycle management, inventory SVG data charts, client-side RAG searching, and context-aware AI.">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">T</div>
+        <div class="logo-text">
+          <h2>TEX-FLOW</h2>
+          <p>Enterprise ERP</p>
+        </div>
+      </div>
+      
+      <ul class="sidebar-menu">
+        <li>
+          <div class="menu-item active dashboard-tab" data-tab="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </div>
+        </li>
+        <li>
+          <div class="menu-item plm-tab" data-tab="plm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            PLM & RAG Spec
+          </div>
+        </li>
+        <li>
+          <div class="menu-item inventory-tab" data-tab="inventory">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+            Material Inventory
+          </div>
+        </li>
+        <li>
+          <div class="menu-item logistics-tab" data-tab="logistics">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8 12 12V4"/><path d="M16.2 16.2 12 12H4"/></svg>
+            Logistics Tracker
+          </div>
+        </li>
+        <li>
+          <div class="menu-item ai-tab" data-tab="ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            AI Assistant
+          </div>
+        </li>
+      </ul>
+      
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="avatar">PM</div>
+          <div class="user-info">
+            <h4>Pravan M.</h4>
+            <p>Production Manager</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- App Header -->
+      <header class="main-header">
+        <div class="header-title">
+          <h1 id="current-header-title">Dashboard Control Center</h1>
+        </div>
+        <div class="header-actions">
+          <div class="disk-alert-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Host Storage: 173MB Available (Optimized SPA Mode)</span>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="navigateToTab('ai')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Ask AI
+          </button>
+        </div>
+      </header>
+      
+      <!-- Content Views Wrapper -->
+      <div class="view-container">
+        
+        <!-- 1. DASHBOARD VIEW -->
+        <section id="dashboard-view" class="view-panel active">
+          <!-- Stat Grid -->
+          <div class="grid-3">
+            <!-- Dynamically populated stat cards -->
+          </div>
+          
+          <div class="dashboard-grid">
+            <!-- Left Side: Live Operations Alerts -->
+            <div class="card">
+              <div class="card-title-bar">
+                <h3>⚠️ Actionable Supply Warnings</h3>
+                <span style="font-size: 11px; color: var(--text-muted)">Real-time system exceptions</span>
+              </div>
+              <div id="dashboard-alerts-container" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Dynamically populated alerts -->
+              </div>
+            </div>
+            
+            <!-- Right Side: PLM Mini Table & Shortcuts -->
+            <div class="card" style="display: flex; flex-direction: column;">
+              <div class="card-title-bar">
+                <h3>📁 Active Garment Projects</h3>
+                <button class="btn btn-sm btn-teal" onclick="navigateToTab('plm')">Manage PLM</button>
+              </div>
+              <div id="dashboard-summary-projects" style="flex-grow: 1;">
+                <!-- Dynamically populated summary of projects -->
+              </div>
+              <div style="margin-top: 16px; padding: 12px; background: rgba(99, 102, 241, 0.04); border: 1px solid var(--border-color); border-radius: var(--radius-md)">
+                <h4 style="font-size: 12px; color: var(--accent-inv); margin-bottom: 4px;">🚀 Smart Assistant Tip</h4>
+                <p style="font-size: 11px; color: var(--text-muted)">Ask AI: <em>"Does the Hamburg shipping delay impact denim production?"</em> to query crossed state dependencies.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- 2. PLM & RAG VIEW -->
+        <section id="plm-view" class="view-panel">
+          <div class="plm-header">
+            <div>
+              <h2 style="font-size: 18px; margin-bottom: 4px;">Product Lifecycle Management (PLM)</h2>
+              <p style="font-size: 12px; color: var(--text-muted)">Define style workflows, monitor manufacturing stages, and adjust progress milestones</p>
+            </div>
+            <button class="btn btn-teal" onclick="addNewPLMProject()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Design Project
+            </button>
+          </div>
+          
+          <!-- Projects Cards Container -->
+          <div class="plm-project-list" id="plm-projects-list">
+            <!-- Dynamically populated PLM Project cards -->
+          </div>
+          
+          <hr style="border: none; border-top: 1px solid var(--border-color); margin: 40px 0;">
+          
+          <!-- RAG Search Panel -->
+          <div class="rag-section">
+            <h2 style="font-size: 18px; margin-bottom: 4px;">Compliance & Specs RAG Library</h2>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Retrieve precise snippets and synthesize compliance rules using the client-side Knowledge Index</p>
+            
+            <div class="rag-grid">
+              <!-- Left side: indexed manuals list -->
+              <div class="card">
+                <div class="card-title-bar">
+                  <h3>Indexed Document Repositories</h3>
+                  <button class="btn btn-sm" onclick="simulateUploadDocument()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Ingest File
+                  </button>
+                </div>
+                <div class="document-library" id="rag-document-library">
+                  <!-- Dynamically populated document catalog list -->
+                </div>
+              </div>
+              
+              <!-- Right side: RAG search console -->
+              <div class="card rag-results-panel">
+                <div class="card-title-bar">
+                  <h3>Retrieval & Synthesis Workspace</h3>
+                </div>
+                <div class="rag-search-box">
+                  <div class="search-input-wrapper" style="flex-grow: 1;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="input-field" id="rag-query-input" placeholder="Ask about compliance standards (e.g. lead limits, GOTS effluent)...">
+                  </div>
+                  <button class="btn btn-teal" id="rag-search-btn">Search specs</button>
+                </div>
+                
+                <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">Synthesized AI Answer</div>
+                <div class="rag-output-answer" id="rag-output-answer">
+                  Search results will display here. Select a document on the left to review its full index directly.
+                </div>
+                
+                <div class="rag-sources-title">Retrieved Reference Nodes</div>
+                <div class="rag-sources-list" id="rag-sources-list">
+                  <div style="color: var(--text-muted); font-size: 11px">Waiting for query execution...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- 3. INVENTORY VIEW -->
+        <section id="inventory-view" class="view-panel">
+          <div class="inventory-actions">
+            <!-- Filter tabs -->
+            <div class="filter-group">
+              <button class="filter-btn active" data-filter="all">All Items</button>
+              <button class="filter-btn" data-filter="yarn">Yarns</button>
+              <button class="filter-btn" data-filter="fabric">Fabrics</button>
+              <button class="filter-btn" data-filter="dye">Dyes</button>
+              <button class="filter-btn" data-filter="accessories">Trims & Accessories</button>
+            </div>
+            
+            <!-- Actions -->
+            <div style="display: flex; gap: 12px;">
+              <div class="search-input-wrapper" style="width: 250px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" class="input-field" id="inventory-search" placeholder="Search material catalog...">
+              </div>
+              <button class="btn btn-primary" onclick="openAddNewMaterialModal()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Material
+              </button>
+            </div>
+          </div>
+          
+          <!-- Inventory Dashboard Grid -->
+          <div class="grid-2">
+            <!-- Left: Table -->
+            <div class="card" style="padding: 0; overflow: hidden;">
+              <div class="table-container">
+                <table class="app-table">
+                  <thead>
+                    <tr>
+                      <th>Material / SKU</th>
+                      <th>Category</th>
+                      <th>Quantity</th>
+                      <th>Warehouse Slot</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventory-table-body">
+                    <!-- Dynamically populated inventory rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Right: Interactive SVG Analytics -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+              <div class="card">
+                <div class="card-title-bar">
+                  <h3>📊 Material Stock Levels</h3>
+                  <span style="font-size: 11px; color: var(--text-muted)">Units vs Safety Thresholds</span>
+                </div>
+                <div id="inventory-bar-chart" class="chart-container">
+                  <!-- SVG Bar Chart -->
+                </div>
+              </div>
+              
+              <div class="card">
+                <div class="card-title-bar">
+                  <h3>🍩 Material Category Breakdown</h3>
+                  <span style="font-size: 11px; color: var(--text-muted)">Volume distribution</span>
+                </div>
+                <div id="inventory-pie-chart" class="chart-container">
+                  <!-- SVG Donut Chart -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- 4. LOGISTICS VIEW -->
+        <section id="logistics-view" class="view-panel">
+          <div class="logistics-grid">
+            <!-- Left Side: Interactive SVG shipping map and list -->
+            <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
+              <div class="card shipments-map-card">
+                <div class="card-title-bar">
+                  <h3>🌍 Global Vessel & Supply Routes</h3>
+                  <span style="font-size: 11px; color: var(--text-muted)">Live intercontinental coordinates</span>
+                </div>
+                <div id="shipments-map-container" style="flex-grow: 1; min-height: 250px;">
+                  <!-- Dynamically populated SVG route map -->
+                </div>
+              </div>
+              
+              <div class="card" style="flex-grow: 1; display: flex; flex-direction: column; min-height: 180px;">
+                <div class="card-title-bar">
+                  <h3>📦 Active Cargo Register</h3>
+                </div>
+                <div id="shipments-list-panel" style="overflow-y: auto; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; max-height: 200px; padding-right: 6px;">
+                  <!-- Shipments selection panel -->
+                </div>
+              </div>
+            </div>
+            
+            <!-- Right Side: Timeline and mitigation triggers -->
+            <div class="card shipment-detail-card" id="shipment-details-panel">
+              <!-- Dynamically populated shipment details and log tracks -->
+            </div>
+          </div>
+        </section>
+        
+        <!-- 5. AI ASSISTANT VIEW -->
+        <section id="ai-view" class="view-panel">
+          <div class="ai-view-container">
+            <!-- Chat Pane -->
+            <div class="chat-panel">
+              <div class="chat-header-bar">
+                <div class="chat-ai-avatar">🤖</div>
+                <div class="chat-ai-status">
+                  <h4>Textile Intelligence AI Core</h4>
+                  <p>Context Integrated</p>
+                </div>
+              </div>
+              
+              <div class="chat-messages-thread" id="ai-chat-thread">
+                <!-- Dynamically populated chat dialogue -->
+              </div>
+              
+              <div class="chat-input-bar">
+                <input type="text" id="ai-chat-input" placeholder="Ask details (e.g. 'Are we low on dyes?', 'Is there a delay on TX-908?')...">
+                <button class="btn btn-primary" id="ai-send-btn" style="background-color: var(--accent-ai); border-color: var(--accent-ai)">Send</button>
+              </div>
+            </div>
+            
+            <!-- Prompt Suggestions Sidebar -->
+            <div class="card chat-sidebar-card">
+              <h3>💡 Quick Inquiries</h3>
+              <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 16px;">Test the AI agent's contextual awareness of inventory status, shipping delays, and compliance RAG specs:</p>
+              
+              <div class="prompt-suggestions">
+                <button class="prompt-btn" onclick="sendSuggestedPrompt('Which materials are currently running low on stock?')">
+                  🔍 Check low stock materials
+                </button>
+                <button class="prompt-btn" onclick="sendSuggestedPrompt('Does the Indigo Dye delay in Hamburg affect our production?')">
+                  🚢 Analyze Hamburg port delay impact
+                </button>
+                <button class="prompt-btn" onclick="sendSuggestedPrompt('What does OEKO-TEX Standard 100 say about lead and heavy metal limits?')">
+                  📚 Query OEKO-TEX lead limits (RAG)
+                </button>
+                <button class="prompt-btn" onclick="sendSuggestedPrompt('What are GOTS wastewater and pH discharge requirements?')">
+                  📚 GOTS environmental rules (RAG)
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+      </div>
+    </main>
+  </div>
+  
+  <!-- INVENTORY EDIT MODAL OVERLAY -->
+  <div class="modal-overlay" id="inventory-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Adjust Inventory Quantity</h3>
+        <button class="modal-close" onclick="closeStockModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <h4 id="modal-item-name" style="font-size: 14px; margin-bottom: 16px; color: var(--text-main)">Material Name</h4>
+        <div class="form-group">
+          <label for="edit-stock-qty">Physical Stock Count</label>
+          <input type="number" id="edit-stock-qty" min="0">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeStockModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveStockEdit()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
