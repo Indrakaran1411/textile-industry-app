@@ -266,6 +266,45 @@ let chatHistory = [
   }
 ];
 
+let ragChatHistory = [
+  {
+    id: 'rag-chat-1',
+    role: 'assistant',
+    text: "Hello! I'm the Compliance & Specs RAG Assistant. I retrieve and synthesize answers from your indexed document repositories (OEKO-TEX, GOTS, dyeing SOPs, fiber specs, and any files you ingest). Ask me about chemical limits, dyeing parameters, or material standards.",
+    timestamp: '21:20'
+  }
+];
+
+const ragSuggestedPrompts = [
+  "What does OEKO-TEX Standard 100 say about lead and heavy metal limits?",
+  "What pH range and temperature should be used for indigo dyeing?",
+  "What are the GOTS fiber composition and effluent requirements?",
+  "How does the supercritical CO2 waterless dyeing process work?",
+  "What is the moisture regain and tensile strength of linen fiber?"
+];
+
+// === Audit / Activity Log ===
+let activityLog = [
+  { id: 'log-1', timestamp: '2026-06-08 09:14', actor: 'Elene Rostova', action: 'Stage Update', module: 'PLM', details: 'Organic Cotton Hoodie (PLM-SS26-HD04) moved to Tech Pack.' },
+  { id: 'log-2', timestamp: '2026-06-10 11:02', actor: 'System', module: 'Inventory', action: 'Stock Adjustment', details: 'Organic Cotton Yarn (Ne 30/1) quantity updated to 4,500 kg.' },
+  { id: 'log-3', timestamp: '2026-06-11 06:00', actor: 'System', module: 'Logistics', action: 'Critical Flag', details: 'Shipment TX-908 (Natural Indigo Dye) flagged CRITICAL due to Hamburg port congestion.' },
+  { id: 'log-4', timestamp: '2026-06-11 14:30', actor: 'Sarah Jenkins', action: 'Stage Update', module: 'PLM', details: 'Premium Silk Slip Dress (PLM-SS26-DRS12) moved to Quality Control.' }
+];
+
+function logActivity(action, module, details, actor = 'Pravan M.') {
+  activityLog.unshift({
+    id: `log-${activityLog.length + 1}`,
+    timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
+    actor,
+    action,
+    module,
+    details
+  });
+  if (activeTab === 'audit') {
+    renderAuditLogView();
+  }
+}
+
 let activeTab = 'dashboard';
 let activeShipmentId = 'ship-1';
 let inventoryFilter = 'all';
@@ -323,6 +362,8 @@ function renderCurrentView() {
     renderLogisticsView();
   } else if (activeTab === 'ai') {
     renderAIView();
+  } else if (activeTab === 'audit') {
+    renderAuditLogView();
   }
 }
 
@@ -451,193 +492,206 @@ window.reorderMaterial = function(id) {
   const item = inventory.find(i => i.id === id);
   if (item) {
     // Increase quantity simulated
-    item.quantity += Math.ceil(item.reorderLevel * 1.5);
+    const added = Math.ceil(item.reorderLevel * 1.5);
+    item.quantity += added;
     item.lastUpdated = new Date().toISOString().split('T')[0];
     alert(`Restock order placed for ${item.name}! Added simulated stock.`);
+    logActivity('Restock Order', 'Inventory', `${item.name} (${item.sku}) restocked with +${added} ${item.unit}. New total: ${item.quantity} ${item.unit}.`);
     renderCurrentView();
   }
 };
 
-// === PLM & RAG Controller ===
+// === PLM tracker Controller ===
 function renderPLMView() {
-  // Render Projects
-  const plmList = document.getElementById('plm-projects-list');
-  if (plmList) {
-    plmList.innerHTML = plmProjects.map(p => {
-      const activeStageIndex = p.timeline.findIndex(t => t.stage === p.stage);
-      
-      const timelineNodesHtml = p.timeline.map((t, idx) => {
-        let statusClass = '';
-        if (t.status === 'completed') statusClass = 'completed';
-        else if (t.status === 'active') statusClass = 'active';
-        
-        return `<div class="plm-stage-node ${statusClass}" data-stage-name="${t.stage}" onclick="updateProjectStage('${p.id}', '${t.stage}')"></div>`;
-      }).join('');
-      
-      return `
-        <div class="card plm-project-card">
-          <div class="project-meta">
-            <span>${p.category}</span>
-            <span>${p.season}</span>
-          </div>
-          <h3 style="margin-bottom: 4px">${p.name}</h3>
-          <p style="font-size: 11px; color: var(--text-muted); font-family: monospace">${p.code}</p>
-          
-          <div class="project-progress-bar">
-            <div class="project-progress-fill" style="width: ${p.completionPercent}%"></div>
-          </div>
-          
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px">
-            <strong>Specs:</strong> ${p.fabricSpecs}
-          </div>
-          
-          <div class="plm-stages-flow">
-            ${timelineNodesHtml}
-          </div>
-          
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border-color)">
-            <span style="font-size: 11px; color: var(--text-muted)">Lead: <strong>${p.leadDesigner}</strong></span>
-            <span style="font-size: 11px; color: var(--text-muted)">Updated: ${p.lastUpdated}</span>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-  
-  // Render Documents library
   renderRAGLibrary();
+  renderRAGChat();
+  renderRAGSuggestions();
 }
-
-window.updateProjectStage = function(projId, stageName) {
-  const p = plmProjects.find(item => item.id === projId);
-  if (p) {
-    p.stage = stageName;
-    
-    // Set percentages automatically based on stage
-    const stages = ['Concept', 'Tech Pack', 'Prototyping', 'Bulk Production', 'Quality Control', 'Completed'];
-    const idx = stages.indexOf(stageName);
-    p.completionPercent = Math.round(((idx + 1) / stages.length) * 100);
-    
-    // Reset timelines
-    p.timeline.forEach(t => {
-      const tIdx = stages.indexOf(t.stage);
-      if (tIdx < idx) {
-        t.status = 'completed';
-        if (t.date === 'Pending') t.date = new Date().toISOString().split('T')[0];
-      } else if (tIdx === idx) {
-        t.status = 'active';
-        t.date = new Date().toISOString().split('T')[0];
-      } else {
-        t.status = 'pending';
-        t.date = 'Pending';
-      }
-    });
-    
-    p.lastUpdated = new Date().toISOString().split('T')[0];
-    renderCurrentView();
-  }
-};
-
-window.addNewPLMProject = function() {
-  const name = prompt("Enter garment project name (e.g. Organic Wool Knitwear):");
-  if (!name) return;
-  const leadDesigner = prompt("Enter lead designer:", "Sarah Jenkins");
-  if (!leadDesigner) return;
-  
-  const id = `plm-${plmProjects.length + 1}`;
-  const code = `PLM-SS26-KNT${Math.floor(Math.random() * 90 + 10)}`;
-  
-  plmProjects.push({
-    id,
-    name,
-    code,
-    category: 'Casualwear / Knits',
-    stage: 'Concept',
-    completionPercent: 15,
-    leadDesigner,
-    season: 'SS26 (Spring/Summer)',
-    fabricSpecs: 'Organic Wool thread, localized spinning.',
-    lastUpdated: new Date().toISOString().split('T')[0],
-    timeline: [
-      { stage: 'Concept', date: new Date().toISOString().split('T')[0], status: 'active' },
-      { stage: 'Tech Pack', date: 'Pending', status: 'pending' },
-      { stage: 'Prototyping', date: 'Pending', status: 'pending' },
-      { stage: 'Bulk Production', date: 'Pending', status: 'pending' },
-      { stage: 'Quality Control', date: 'Pending', status: 'pending' },
-      { stage: 'Completed', date: 'Pending', status: 'pending' }
-    ]
-  });
-  
-  renderCurrentView();
-};
 
 // === RAG Engine ===
 function renderRAGLibrary() {
   const docList = document.getElementById('rag-document-library');
   if (docList) {
     docList.innerHTML = ragDocuments.map(doc => `
-      <div class="doc-list-item" onclick="viewDocumentContents('${doc.id}')">
+      <div class="doc-list-item">
         <div class="doc-list-header">
-          <h4>${doc.title}</h4>
+          <h4 style="cursor: pointer;" onclick="viewDocumentContents('${doc.id}')">${doc.title}</h4>
           <span class="doc-badge ${doc.category.toLowerCase().replace(' ', '-')}">${doc.category}</span>
         </div>
-        <div class="doc-excerpt">${doc.content}</div>
+        <div class="doc-excerpt" onclick="viewDocumentContents('${doc.id}')" style="cursor: pointer;">${doc.content}</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <span style="font-size: 10px; color: var(--text-muted)">Updated: ${doc.lastUpdated}</span>
+          <button class="btn btn-sm" onclick="event.stopPropagation(); updateDocumentContent('${doc.id}')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            Update
+          </button>
+        </div>
       </div>
     `).join('');
   }
 }
 
-window.viewDocumentContents = function(id) {
-  const doc = ragDocuments.find(d => d.id === id);
-  if (doc) {
-    const outputAnswer = document.getElementById('rag-output-answer');
-    const sourcesList = document.getElementById('rag-sources-list');
-    
-    if (outputAnswer) {
-      outputAnswer.innerHTML = `<h3 style="margin-bottom: 8px; font-size: 15px; color: var(--accent-plm)">${doc.title}</h3>${doc.content}`;
-    }
-    
-    if (sourcesList) {
-      sourcesList.innerHTML = `
-        <div class="source-snippet-card">
-          <div class="source-meta">
-            <span>FULL ARCHIVE</span>
-            <span>Category: ${doc.category}</span>
-          </div>
-          <div class="source-snippet-text">Displaying full indexed text corpus. Last updated on ${doc.lastUpdated}.</div>
-        </div>
-      `;
-    }
+// Populate the "quick question" suggestion buttons in the RAG chat sidebar
+function renderRAGSuggestions() {
+  const container = document.getElementById('rag-prompt-suggestions');
+  if (container) {
+    container.innerHTML = ragSuggestedPrompts.map(p => `
+      <button class="prompt-btn" onclick="sendRagSuggestedPrompt('${p.replace(/'/g, "\\'")}')">🔍 ${p}</button>
+    `).join('');
+  }
+}
+
+window.sendRagSuggestedPrompt = function(promptText) {
+  const chatInput = document.getElementById('rag-chat-input');
+  if (chatInput) {
+    chatInput.value = promptText;
+    const sendBtn = document.getElementById('rag-chat-send-btn');
+    if (sendBtn) sendBtn.click();
   }
 };
 
+// Clicking an indexed document asks the RAG assistant to summarize it in chat
+window.viewDocumentContents = function(id) {
+  const doc = ragDocuments.find(d => d.id === id);
+  if (!doc) return;
+
+  // Switch to the PLM tab if invoked from elsewhere (e.g. AI Assistant reference badges)
+  if (activeTab !== 'plm') {
+    navigateToTab('plm');
+  }
+
+  ragChatHistory.push({
+    id: `rag-chat-${ragChatHistory.length + 1}`,
+    role: 'user',
+    text: `Show me the full indexed content of "${doc.title}"`,
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+
+  ragChatHistory.push({
+    id: `rag-chat-${ragChatHistory.length + 1}`,
+    role: 'assistant',
+    text: `<strong style="color: var(--accent-plm)">${doc.title}</strong><br><br>${doc.content.replace(/\n/g, '<br>')}`,
+    sources: [{
+      docId: doc.id,
+      docTitle: doc.title,
+      text: `Full indexed text corpus · Category: ${doc.category} · Last updated ${doc.lastUpdated}`
+    }],
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+
+  renderRAGChat();
+};
+
+function renderRAGChat() {
+  const thread = document.getElementById('rag-chat-thread');
+  if (!thread) return;
+
+  thread.innerHTML = ragChatHistory.map(msg => {
+    const isUser = msg.role === 'user';
+    const avatar = isUser ? 'ME' : '📚';
+
+    let sourcesHtml = '';
+    if (msg.sources && msg.sources.length > 0) {
+      sourcesHtml = `
+        <div class="rag-chat-sources">
+          <div class="rag-chat-sources-title">Retrieved reference nodes</div>
+          ${msg.sources.map(src => `
+            <div class="source-snippet-card" onclick="viewDocumentContents('${src.docId}')" style="cursor: pointer;">
+              <div class="source-meta">
+                <span>${src.docTitle}</span>
+                ${src.score !== undefined ? `<span>Relevance: ${(src.score * 100).toFixed(0)}</span>` : ''}
+              </div>
+              <div class="source-snippet-text">"${src.text}"</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="chat-message ${msg.role}">
+        <div class="avatar" style="background: ${isUser ? 'linear-gradient(135deg, var(--accent-inv), #818cf8)' : 'linear-gradient(135deg, var(--accent-plm), #22d3ee)'}; flex-shrink: 0;">
+          ${avatar}
+        </div>
+        <div class="msg-bubble">
+          <div style="white-space: pre-wrap;">${msg.text}</div>
+          ${sourcesHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  thread.scrollTop = thread.scrollHeight;
+}
+
 function setupRAGEvents() {
-  const searchBtn = document.getElementById('rag-search-btn');
-  const queryInput = document.getElementById('rag-query-input');
-  
-  if (searchBtn && queryInput) {
-    const handleSearch = () => {
-      const query = queryInput.value.trim();
-      if (!query) return;
-      
-      performRAGSearch(query);
+  const sendBtn = document.getElementById('rag-chat-send-btn');
+  const chatInput = document.getElementById('rag-chat-input');
+
+  if (sendBtn && chatInput) {
+    const handleSend = () => {
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      ragChatHistory.push({
+        id: `rag-chat-${ragChatHistory.length + 1}`,
+        role: 'user',
+        text,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      chatInput.value = '';
+      renderRAGChat();
+
+      // Typing indicator
+      const thread = document.getElementById('rag-chat-thread');
+      const typingIndicator = document.createElement('div');
+      typingIndicator.className = 'chat-message assistant';
+      typingIndicator.id = 'rag-typing-indicator';
+      typingIndicator.innerHTML = `
+        <div class="avatar" style="background: linear-gradient(135deg, var(--accent-plm), #22d3ee); flex-shrink: 0;">📚</div>
+        <div class="msg-bubble" style="background-color: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color)">
+          <div class="msg-typing-indicator">
+            <div class="msg-typing-dot"></div>
+            <div class="msg-typing-dot"></div>
+            <div class="msg-typing-dot"></div>
+          </div>
+        </div>
+      `;
+      if (thread) {
+        thread.appendChild(typingIndicator);
+        thread.scrollTop = thread.scrollHeight;
+      }
+
+      setTimeout(() => {
+        const typingNode = document.getElementById('rag-typing-indicator');
+        if (typingNode) typingNode.remove();
+
+        const result = computeRAGAnswer(text);
+        ragChatHistory.push({
+          id: `rag-chat-${ragChatHistory.length + 1}`,
+          role: 'assistant',
+          text: result.html,
+          sources: result.sources,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        renderRAGChat();
+      }, 1000);
     };
-    
-    searchBtn.addEventListener('click', handleSearch);
-    queryInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleSearch();
+
+    sendBtn.addEventListener('click', handleSend);
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleSend();
     });
   }
 }
 
-function performRAGSearch(query) {
-  const outputAnswer = document.getElementById('rag-output-answer');
-  const sourcesList = document.getElementById('rag-sources-list');
-  
+// Core retrieval + synthesis logic. Returns { html, sources } so it can be
+// reused both by the PLM RAG chat and the main AI Assistant.
+function computeRAGAnswer(query) {
   // 1. Text chunking: Split documents into paragraphs/sentences
   let snippets = [];
   ragDocuments.forEach(doc => {
-    // Split into sentences (or lines)
     const lines = doc.content.split('\n');
     lines.forEach(line => {
       if (line.trim().length > 15) {
@@ -649,83 +703,74 @@ function performRAGSearch(query) {
       }
     });
   });
-  
+
   // 2. Keyword Index Search (TF-IDF approximated)
-  const queryWords = query.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').filter(w => w.length > 2);
-  
+  const queryLower = query.toLowerCase();
+  const queryWords = queryLower.replace(/[^a-z0-9 ]/g, '').split(' ').filter(w => w.length > 2);
+
   let matches = snippets.map(snippet => {
     let score = 0;
     const snippetLower = snippet.text.toLowerCase();
-    
+
     queryWords.forEach(word => {
       if (snippetLower.includes(word)) {
         score += 1;
-        // Boost score if consecutive query words exist
-        if (query.toLowerCase().includes(word)) {
+        if (queryLower.includes(word)) {
           score += 0.5;
         }
       }
     });
-    
+
     return { ...snippet, score };
   })
   .filter(match => match.score > 0)
-  .sort((a, b) => b.score - a.score)
-  .slice(0, 3); // top 3 matching nodes
-  
+  .sort((a, b) => b.score - a.score);
+
+  // Normalize scores to a 0-1 relevance scale
+  const maxScore = matches.length > 0 ? matches[0].score : 1;
+  matches = matches.slice(0, 3).map(m => ({ ...m, score: Math.min(1, m.score / (maxScore || 1)) }));
+
   // 3. Simulated Generative LLM Response drafting
   if (matches.length === 0) {
-    if (outputAnswer) {
-      outputAnswer.textContent = `No matching textile standard or dye recipe was found for the query: "${query}". Try searching for keywords like "formaldehyde", "lead", "indigo pH", "GOTS GOTS", or "waterless".`;
-    }
-    if (sourcesList) {
-      sourcesList.innerHTML = '<div style="color: var(--text-muted); font-size: 11px">No matching references.</div>';
-    }
-    return;
+    return {
+      html: `No matching textile standard or dye recipe was found for the query: "${query}". Try asking about keywords like "formaldehyde", "lead", "indigo pH", "GOTS", or "waterless dyeing", or ingest a new reference document on the left.`,
+      sources: []
+    };
   }
-  
-  // Construct dynamic synthesis response
+
   let synthesisText = `Based on the retrieved technical document records, here is the synthesized answer for: "${query}":\n\n`;
-  
+
   const bestMatch = matches[0];
-  const containsLead = query.toLowerCase().includes('lead') || query.toLowerCase().includes('metal') || query.toLowerCase().includes('oeko');
-  const containsIndigo = query.toLowerCase().includes('indigo') || query.toLowerCase().includes('dye') || query.toLowerCase().includes('ph');
-  const containsGots = query.toLowerCase().includes('gots') || query.toLowerCase().includes('organic');
-  const containsWaterless = query.toLowerCase().includes('waterless') || query.toLowerCase().includes('co2') || query.toLowerCase().includes('carbon');
-  
+  const containsLead = queryLower.includes('lead') || queryLower.includes('metal') || queryLower.includes('oeko') || queryLower.includes('formaldehyde');
+  const containsIndigo = queryLower.includes('indigo') || queryLower.includes('dye') || queryLower.includes('ph') || queryLower.includes('denim');
+  const containsGots = queryLower.includes('gots') || queryLower.includes('organic');
+  const containsWaterless = queryLower.includes('waterless') || queryLower.includes('co2') || queryLower.includes('carbon');
+  const containsLinen = queryLower.includes('linen') || queryLower.includes('flax') || queryLower.includes('tensile') || queryLower.includes('moisture');
+
   if (containsLead) {
-    synthesisText += `• Heavy metals such as **Lead (Pb)** must have a total concentration **below 90 mg/kg** for all processed textiles according to OEKO-TEX Standard 100 compliance guidelines.\n• For infant garments (Class I), formaldehyde is restricted to 16 mg/kg (undetectable). Nickel releases on metal accessories must remain below 0.5 µg/cm²/week.`;
+    synthesisText += `• Heavy metals such as **Lead (Pb)** must have a total concentration **below 90 mg/kg** for all processed textiles according to OEKO-TEX Standard 100 compliance guidelines.\n• For infant garments (Class I), formaldehyde is restricted to 16 mg/kg (undetectable), while adult Class II is limited to 75 mg/kg. Nickel release on metal accessories must remain below 0.5 µg/cm²/week.`;
   } else if (containsIndigo) {
-    synthesisText += `• In denim indigo dyeing operations, the **pH values must remain strictly between 11.5 and 12.0** (regulated with sodium hydroxide). This ensures proper dye reduction.\n• The hydrosulfite reducing agent must be kept at 2.5 - 3.0 g/L, and dipping times should stay at 20 seconds, followed by 60 seconds of air oxidation.`;
+    synthesisText += `• In denim indigo dyeing operations, the **pH values must remain strictly between 11.5 and 12.0** (regulated with sodium hydroxide). This ensures proper dye reduction.\n• The hydrosulfite reducing agent must be kept at 2.5 - 3.0 g/L, dye bath temperature between 28°C and 32°C, with 20-second dips followed by 60 seconds of air oxidation.`;
   } else if (containsGots) {
-    synthesisText += `• Products certified under **GOTS v7.0** labeled "Organic" require a minimum of **95% certified organic fibers**. Products labeled "Made with Organic" require at least **70%**.\n• Effluent water treatment standards require ETP discharge pH to remain between 6.0 and 9.0, with a chemical oxygen demand (COD) under 20 mg/L.`;
+    synthesisText += `• Products certified under **GOTS v7.0** labeled "Organic" require a minimum of **95% certified organic fibers**. Products labeled "Made with Organic" require at least **70%**.\n• Effluent water treatment standards require ETP discharge pH to remain between 6.0 and 9.0, with a chemical oxygen demand (COD) under 20 mg/L. Formaldehyde, toxic heavy metals, and GMO enzymes are completely banned.`;
   } else if (containsWaterless) {
-    synthesisText += `• The waterless dyeing process compresses **carbon dioxide** beyond its critical state of 73.8 bar and 31.1°C to act as a disperse solvent at **120°C (polyester) and 250-280 bar pressure**.\n• This system achieves a 95% dye exhaustion efficiency and bypasses the energy-intensive drying phases completely.`;
+    synthesisText += `• The waterless dyeing process compresses **carbon dioxide** beyond its critical state of 73.8 bar and 31.1°C to act as a disperse solvent at **120°C (polyester) and 250-280 bar pressure**.\n• This system achieves a 95% dye exhaustion efficiency, eliminates wastewater generation, and cuts energy use by up to 50% by skipping the drying phase.`;
+  } else if (containsLinen) {
+    synthesisText += `• Natural linen (flax) fiber has a standard moisture regain of **12%**; damp storage causes mildew and severe loss of tensile strength.\n• Dry fiber tensile strength ranges from **5.5 to 6.5 g/denier** and increases by ~20% when wet. Fiber lengths over 45cm are graded for premium long-flax spinning.`;
   } else {
-    // Generic synthesis from match text
+    // Generic synthesis from the top matching snippets
     synthesisText += `• Document [${bestMatch.docTitle}] indicates: "${bestMatch.text}"\n`;
     if (matches[1]) {
-      synthesisText += `• Additionally, records state: "${matches[1].text}"`;
+      synthesisText += `• Additionally, records from [${matches[1].docTitle}] state: "${matches[1].text}"`;
     }
   }
-  
+
   synthesisText += `\n\n[Synthesis finalized via Local Agentic RAG core]`;
-  
-  if (outputAnswer) {
-    outputAnswer.innerHTML = synthesisText.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  }
-  
-  if (sourcesList) {
-    sourcesList.innerHTML = matches.map(match => `
-      <div class="source-snippet-card">
-        <div class="source-meta">
-          <span>${match.docTitle}</span>
-          <span>Score: ${(match.score * 100).toFixed(0)}</span>
-        </div>
-        <div class="source-snippet-text">"${match.text}"</div>
-      </div>
-    `).join('');
-  }
+
+  return {
+    html: synthesisText.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'),
+    sources: matches
+  };
 }
 
 window.simulateUploadDocument = function() {
@@ -733,17 +778,53 @@ window.simulateUploadDocument = function() {
   if (!title) return;
   const content = prompt("Paste document text contents:");
   if (!content) return;
-  
-  ragDocuments.push({
+
+  const newDoc = {
     id: `doc-${ragDocuments.length + 1}`,
     title,
     category: 'Manual',
     lastUpdated: new Date().toISOString().split('T')[0],
     content
-  });
-  
+  };
+  ragDocuments.push(newDoc);
+
   renderRAGLibrary();
-  alert("Document successfully ingested and indexed into RAG database!");
+
+  logActivity('Document Ingested', 'PLM tracker', `New document "${title}" ingested and indexed.`);
+
+  ragChatHistory.push({
+    id: `rag-chat-${ragChatHistory.length + 1}`,
+    role: 'assistant',
+    text: `✅ Document ingested and indexed: <strong>${title}</strong>. It's now searchable in the Knowledge Index — ask me a question about it any time.`,
+    sources: [{ docId: newDoc.id, docTitle: newDoc.title, text: 'Newly ingested document, ready for retrieval.' }],
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+  renderRAGChat();
+};
+
+// Provision for updating an existing indexed document's content
+window.updateDocumentContent = function(id) {
+  const doc = ragDocuments.find(d => d.id === id);
+  if (!doc) return;
+
+  const updatedContent = prompt(`Update content for "${doc.title}":`, doc.content);
+  if (updatedContent === null || updatedContent.trim() === '') return;
+
+  doc.content = updatedContent;
+  doc.lastUpdated = new Date().toISOString().split('T')[0];
+
+  renderRAGLibrary();
+
+  logActivity('Document Updated', 'PLM tracker', `Document "${doc.title}" content was re-indexed with updated text.`);
+
+  ragChatHistory.push({
+    id: `rag-chat-${ragChatHistory.length + 1}`,
+    role: 'assistant',
+    text: `🔄 Document updated and re-indexed: <strong>${doc.title}</strong>. The Knowledge Index now reflects the latest content.`,
+    sources: [{ docId: doc.id, docTitle: doc.title, text: 'Document content updated, ready for retrieval.' }],
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+  renderRAGChat();
 };
 
 // === Inventory Tracker Controller ===
@@ -973,9 +1054,11 @@ window.saveStockEdit = function() {
   
   const item = inventory.find(i => i.id === currentEditId);
   if (item) {
+    const oldQty = item.quantity;
     item.quantity = qty;
     item.lastUpdated = new Date().toISOString().split('T')[0];
     closeStockModal();
+    logActivity('Stock Adjustment', 'Inventory', `${item.name} (${item.sku}) quantity changed from ${oldQty} to ${qty} ${item.unit}.`);
     renderCurrentView();
   }
 };
@@ -1003,6 +1086,7 @@ window.openAddNewMaterialModal = function() {
     supplier: 'EcoTextile Co.',
     lastUpdated: new Date().toISOString().split('T')[0]
   });
+  logActivity('Material Added', 'Inventory', `New material "${name}" (${sku}) added with initial stock of ${quantity} ${unit}.`);
   renderCurrentView();
 };
 
@@ -1532,3 +1616,104 @@ function generateAIResponse(userText) {
   
   renderAIView();
 }
+
+// === Audit Log Controller ===
+function renderAuditLogView() {
+  const tableBody = document.getElementById('audit-log-table-body');
+  if (tableBody) {
+    tableBody.innerHTML = activityLog.map(log => `
+      <tr>
+        <td style="font-family: monospace; font-size: 11px; white-space: nowrap;">${log.timestamp}</td>
+        <td style="font-weight: 600;">${log.actor}</td>
+        <td><span style="padding: 4px 8px; border-radius: 4px; background: rgba(99, 102, 241, 0.08); border: 1px solid var(--border-color); font-size: 11px;">${log.action}</span></td>
+        <td>${log.module}</td>
+        <td style="color: var(--text-muted); font-size: 12px;">${log.details}</td>
+      </tr>
+    `).join('');
+  }
+}
+
+// === Export / Reporting ===
+
+function downloadPDFTable(title, head, body, filename) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape' });
+  doc.setFontSize(14);
+  doc.text(title, 14, 16);
+  doc.setFontSize(9);
+  doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 22);
+  doc.autoTable({
+    head: [head],
+    body,
+    startY: 28,
+    styles: { fontSize: 8, cellPadding: 2 },
+    headStyles: { fillColor: [99, 102, 241] }
+  });
+  doc.save(filename);
+}
+
+function downloadExcelTable(sheetName, head, body, filename) {
+  const wsData = [head, ...body];
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  XLSX.writeFile(wb, filename);
+}
+
+// --- Inventory Export ---
+window.exportInventoryPDF = function() {
+  const head = ['Material', 'SKU', 'Category', 'Quantity', 'Unit', 'Reorder Level', 'Location', 'Supplier', 'Last Updated'];
+  const body = inventory.map(i => [i.name, i.sku, i.category, i.quantity, i.unit, i.reorderLevel, i.location, i.supplier, i.lastUpdated]);
+  downloadPDFTable('Material Inventory Snapshot', head, body, `inventory-snapshot-${new Date().toISOString().split('T')[0]}.pdf`);
+  logActivity('Report Export', 'Inventory', 'Exported inventory snapshot as PDF.');
+};
+
+window.exportInventoryExcel = function() {
+  const head = ['Material', 'SKU', 'Category', 'Quantity', 'Unit', 'Reorder Level', 'Location', 'Supplier', 'Last Updated'];
+  const body = inventory.map(i => [i.name, i.sku, i.category, i.quantity, i.unit, i.reorderLevel, i.location, i.supplier, i.lastUpdated]);
+  downloadExcelTable('Inventory', head, body, `inventory-snapshot-${new Date().toISOString().split('T')[0]}.xlsx`);
+  logActivity('Report Export', 'Inventory', 'Exported inventory snapshot as Excel.');
+};
+
+// --- Shipments / Logistics Export ---
+window.exportShipmentsPDF = function() {
+  const head = ['Tracking #', 'Name', 'Origin', 'Destination', 'Stage', 'Status', 'Progress %', 'ETA', 'Carrier'];
+  const body = shipments.map(s => [s.trackingNumber, s.name, s.origin, s.destination, s.currentStage, s.status, s.progress, s.eta, s.carrier]);
+  downloadPDFTable('Shipment Log', head, body, `shipment-log-${new Date().toISOString().split('T')[0]}.pdf`);
+  logActivity('Report Export', 'Logistics', 'Exported shipment log as PDF.');
+};
+
+window.exportShipmentsExcel = function() {
+  const head = ['Tracking #', 'Name', 'Origin', 'Destination', 'Stage', 'Status', 'Progress %', 'ETA', 'Carrier'];
+  const body = shipments.map(s => [s.trackingNumber, s.name, s.origin, s.destination, s.currentStage, s.status, s.progress, s.eta, s.carrier]);
+  downloadExcelTable('Shipments', head, body, `shipment-log-${new Date().toISOString().split('T')[0]}.xlsx`);
+  logActivity('Report Export', 'Logistics', 'Exported shipment log as Excel.');
+};
+
+// --- RAG Document Index Export ---
+window.exportRAGLibraryPDF = function() {
+  const head = ['Title', 'Category', 'Last Updated', 'Content Preview'];
+  const body = ragDocuments.map(d => [d.title, d.category, d.lastUpdated, d.content.substring(0, 120) + (d.content.length > 120 ? '...' : '')]);
+  downloadPDFTable('RAG Knowledge Index Summary', head, body, `rag-knowledge-index-${new Date().toISOString().split('T')[0]}.pdf`);
+  logActivity('Report Export', 'PLM tracker', 'Exported knowledge index summary as PDF.');
+};
+
+window.exportRAGLibraryExcel = function() {
+  const head = ['Title', 'Category', 'Last Updated', 'Content'];
+  const body = ragDocuments.map(d => [d.title, d.category, d.lastUpdated, d.content]);
+  downloadExcelTable('RAG Index', head, body, `rag-knowledge-index-${new Date().toISOString().split('T')[0]}.xlsx`);
+  logActivity('Report Export', 'PLM tracker', 'Exported knowledge index summary as Excel.');
+};
+
+// --- Audit Log Export ---
+window.exportAuditLogPDF = function() {
+  const head = ['Timestamp', 'Actor', 'Action', 'Module', 'Details'];
+  const body = activityLog.map(l => [l.timestamp, l.actor, l.action, l.module, l.details]);
+  downloadPDFTable('System Activity & Audit Log', head, body, `audit-log-${new Date().toISOString().split('T')[0]}.pdf`);
+};
+
+window.exportAuditLogExcel = function() {
+  const head = ['Timestamp', 'Actor', 'Action', 'Module', 'Details'];
+  const body = activityLog.map(l => [l.timestamp, l.actor, l.action, l.module, l.details]);
+  downloadExcelTable('Audit Log', head, body, `audit-log-${new Date().toISOString().split('T')[0]}.xlsx`);
+};
