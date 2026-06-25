@@ -3,70 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Antigravity Textile ERP, PLM & Operations Deck</title>
+  <title>Antigravity Textile ERP & PLM Control Center</title>
   <link rel="stylesheet" href="style.css">
-  <meta name="description" content="Advanced textile enterprise control deck with logistics, PLM, client-side RAG search, 5S Kaizens, leave tracking, and central notification reminders.">
+  <meta name="description" content="Advanced textile enterprise control deck with real-time logistics tracking, product lifecycle management, inventory SVG data charts, client-side RAG searching, and context-aware AI.">
 </head>
 <body>
 
   <div class="app-container">
     
+    <!-- Sidebar Navigation -->
     <aside class="sidebar">
       <div class="sidebar-logo">
         <div class="logo-icon">T</div>
         <div class="logo-text">
           <h2>TEX-FLOW</h2>
-          <p>Enterprise Suite</p>
+          <p>Enterprise ERP</p>
         </div>
       </div>
       
       <ul class="sidebar-menu">
         <li>
-          <div class="menu-item active dashboard-tab" data-tab="dashboard" onclick="navigateToTab('dashboard')">
+          <div class="menu-item active dashboard-tab" data-tab="dashboard">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             Dashboard
           </div>
         </li>
         <li>
-          <div class="menu-item plm-tab" data-tab="plm" onclick="navigateToTab('plm')">
+          <div class="menu-item plm-tab" data-tab="plm">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
             PLM & RAG Spec
           </div>
         </li>
         <li>
-          <div class="menu-item inventory-tab" data-tab="inventory" onclick="navigateToTab('inventory')">
+          <div class="menu-item inventory-tab" data-tab="inventory">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
             Material Inventory
           </div>
         </li>
         <li>
-          <div class="menu-item logistics-tab" data-tab="logistics" onclick="navigateToTab('logistics')">
+          <div class="menu-item logistics-tab" data-tab="logistics">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8 12 12V4"/><path d="M16.2 16.2 12 12H4"/></svg>
             Logistics Tracker
           </div>
         </li>
         <li>
-          <div class="menu-item leave-tab" data-tab="leave" onclick="navigateToTab('leave')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
-            Leave Requests <span class="nav-badge" id="nav-leave-count">0</span>
-          </div>
-        </li>
-        <li>
-          <div class="menu-item kaizen-tab" data-tab="kaizen" onclick="navigateToTab('kaizen')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-            5S Kaizen Hub
-          </div>
-        </li>
-        <li>
-          <div class="menu-item announcements-tab" data-tab="announcements" onclick="navigateToTab('announcements')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            Announcements <span class="nav-badge alert" id="nav-announce-count">0</span>
-          </div>
-        </li>
-        <li>
-          <div class="menu-item ai-tab" data-tab="ai" onclick="navigateToTab('ai')">
+          <div class="menu-item ai-tab" data-tab="ai">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             AI Assistant
+          </div>
+        </li>
+        <li>
+          <div class="menu-item hr-tab" data-tab="hr">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            HR & Leave
+          </div>
+        </li>
+        <li>
+          <div class="menu-item announce-tab" data-tab="announcements">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Announcements
+            <span class="sidebar-badge" id="announce-badge">0</span>
+          </div>
+        </li>
+        <li>
+          <div class="menu-item kaizen-tab" data-tab="kaizen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            5S Kaizen
+          </div>
+        </li>
+        <li>
+          <div class="menu-item meetings-tab" data-tab="meetings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Meetings
+            <span class="sidebar-badge" id="meetings-badge">0</span>
+          </div>
+        </li>
+        <li>
+          <div class="menu-item compliance-tab" data-tab="compliance">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Compliance
+            <span class="sidebar-badge" id="compliance-badge">0</span>
+          </div>
+        </li>
+        <li>
+          <div class="menu-item complaints-tab" data-tab="complaints">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Complaints
+            <span class="sidebar-badge" id="complaints-badge">0</span>
           </div>
         </li>
       </ul>
@@ -82,32 +105,22 @@
       </div>
     </aside>
     
+    <!-- Main Content Area -->
     <main class="main-content">
       
+      <!-- App Header -->
       <header class="main-header">
         <div class="header-title">
           <h1 id="current-header-title">Dashboard Control Center</h1>
         </div>
         <div class="header-actions">
-          
-          <div class="notification-bell-container" onclick="toggleNotificationDropdown()">
-            <div class="bell-wrapper">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bell-icon"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-              <span class="bell-badge" id="global-task-badge">0</span>
-            </div>
-            <div class="notification-dropdown" id="notification-dropdown-panel">
-              <div class="dropdown-header">
-                <h3>📌 Central Pending Tasks</h3>
-                <span class="clear-all-text" onclick="dismissAllNotifications(event)">Dismiss Visuals</span>
-              </div>
-              <div class="dropdown-list" id="global-notifications-list">
-                </div>
-            </div>
-          </div>
-
+          <button class="notif-bell" id="notif-bell-btn" onclick="toggleNotifPanel()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-count" id="notif-count">0</span>
+          </button>
           <div class="disk-alert-badge">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            <span>Host Storage: 173MB Available</span>
+            <span>Host Storage: 173MB Available (Optimized SPA Mode)</span>
           </div>
           <button class="btn btn-primary btn-sm" onclick="navigateToTab('ai')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -116,59 +129,108 @@
         </div>
       </header>
       
+      <!-- Content Views Wrapper -->
       <div class="view-container">
         
+        <!-- 1. DASHBOARD VIEW -->
         <section id="dashboard-view" class="view-panel active">
-          <div class="grid-4" id="dashboard-stats-grid">
+          <!-- Stat Grid -->
+          <div class="grid-3">
+            <!-- Dynamically populated stat cards -->
+          </div>
+
+          <!-- KPI Trend Row -->
+          <div class="kpi-trend-row">
+            <div class="card kpi-trend-card">
+              <div class="card-title-bar"><h3>📈 Production Output</h3><span class="kpi-trend-delta positive" id="kpi-prod-delta">↑ 12%</span></div>
+              <div id="kpi-prod-sparkline" class="sparkline-wrap"></div>
+              <div class="kpi-trend-labels"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div>
             </div>
-          
+            <div class="card kpi-trend-card">
+              <div class="card-title-bar"><h3>📦 Inventory Turnover</h3><span class="kpi-trend-delta negative" id="kpi-inv-delta">↓ 4%</span></div>
+              <div id="kpi-inv-sparkline" class="sparkline-wrap"></div>
+              <div class="kpi-trend-labels"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div>
+            </div>
+            <div class="card kpi-trend-card">
+              <div class="card-title-bar"><h3>🚚 On-Time Delivery</h3><span class="kpi-trend-delta positive" id="kpi-otd-delta">↑ 7%</span></div>
+              <div id="kpi-otd-sparkline" class="sparkline-wrap"></div>
+              <div class="kpi-trend-labels"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div>
+            </div>
+            <div class="card kpi-trend-card">
+              <div class="card-title-bar"><h3>⚙️ Defect Rate</h3><span class="kpi-trend-delta negative" id="kpi-defect-delta">↑ 2.1%</span></div>
+              <div id="kpi-defect-sparkline" class="sparkline-wrap"></div>
+              <div class="kpi-trend-labels"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span></div>
+            </div>
+          </div>
+
+          <!-- Department Analytics + Actionable Insights Row -->
+          <div class="grid-2" style="margin-top:0;">
+            <div class="card">
+              <div class="card-title-bar"><h3>🏭 Department Performance</h3><span style="font-size:11px;color:var(--text-muted)">vs last quarter</span></div>
+              <div id="dept-analytics-chart"></div>
+            </div>
+            <div class="card">
+              <div class="card-title-bar"><h3>🎯 Actionable Insights</h3><span style="font-size:11px;color:var(--text-muted)">AI-generated recommendations</span></div>
+              <div id="dashboard-insights-container" style="display:flex;flex-direction:column;gap:10px;margin-top:4px;"></div>
+            </div>
+          </div>
+
           <div class="dashboard-grid">
+            <!-- Left Side: Live Operations Alerts -->
             <div class="card">
               <div class="card-title-bar">
                 <h3>⚠️ Actionable Supply Warnings</h3>
                 <span style="font-size: 11px; color: var(--text-muted)">Real-time system exceptions</span>
               </div>
               <div id="dashboard-alerts-container" style="display: flex; flex-direction: column; gap: 12px;">
-                </div>
+                <!-- Dynamically populated alerts -->
+              </div>
             </div>
             
+            <!-- Right Side: PLM Mini Table & Shortcuts -->
             <div class="card" style="display: flex; flex-direction: column;">
               <div class="card-title-bar">
-                <h3>📋 Task Action Pipeline & Follow-ups</h3>
-                <button class="btn btn-sm btn-teal" onclick="navigateToTab('announcements')">View Announcements</button>
+                <h3>📁 Active Garment Projects</h3>
+                <button class="btn btn-sm btn-teal" onclick="navigateToTab('plm')">Manage PLM</button>
               </div>
-              <div id="dashboard-summary-projects" style="flex-grow: 1; display:flex; flex-direction:column; gap:10px;">
-                </div>
+              <div id="dashboard-summary-projects" style="flex-grow: 1;">
+                <!-- Dynamically populated summary of projects -->
+              </div>
               <div style="margin-top: 16px; padding: 12px; background: rgba(99, 102, 241, 0.04); border: 1px solid var(--border-color); border-radius: var(--radius-md)">
                 <h4 style="font-size: 12px; color: var(--accent-inv); margin-bottom: 4px;">🚀 Smart Assistant Tip</h4>
-                <p style="font-size: 11px; color: var(--text-muted)">Ask AI: <em>"Who has the highest leave frequency?"</em> or <em>"Show pending 5S actions"</em> to check factory operational states.</p>
+                <p style="font-size: 11px; color: var(--text-muted)">Ask AI: <em>"Does the Hamburg shipping delay impact denim production?"</em> to query crossed state dependencies.</p>
               </div>
             </div>
           </div>
         </section>
         
+        <!-- 2. PLM & RAG VIEW -->
         <section id="plm-view" class="view-panel">
           <div class="plm-header">
             <div>
               <h2 style="font-size: 18px; margin-bottom: 4px;">Product Lifecycle Management (PLM)</h2>
               <p style="font-size: 12px; color: var(--text-muted)">Define style workflows, monitor manufacturing stages, and adjust progress milestones</p>
             </div>
-            <button class="btn btn-teal" onclick="openNewProjectModal()">
+            <button class="btn btn-teal" onclick="addNewPLMProject()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               New Design Project
             </button>
           </div>
           
+          <!-- Projects Cards Container -->
           <div class="plm-project-list" id="plm-projects-list">
-            </div>
+            <!-- Dynamically populated PLM Project cards -->
+          </div>
           
           <hr style="border: none; border-top: 1px solid var(--border-color); margin: 40px 0;">
           
+          <!-- RAG Search Panel -->
           <div class="rag-section">
             <h2 style="font-size: 18px; margin-bottom: 4px;">Compliance & Specs RAG Library</h2>
             <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Retrieve precise snippets and synthesize compliance rules using the client-side Knowledge Index</p>
             
             <div class="rag-grid">
+              <!-- Left side: indexed manuals list -->
               <div class="card">
                 <div class="card-title-bar">
                   <h3>Indexed Document Repositories</h3>
@@ -178,9 +240,11 @@
                   </button>
                 </div>
                 <div class="document-library" id="rag-document-library">
-                  </div>
+                  <!-- Dynamically populated document catalog list -->
+                </div>
               </div>
               
+              <!-- Right side: RAG search console -->
               <div class="card rag-results-panel">
                 <div class="card-title-bar">
                   <h3>Retrieval & Synthesis Workspace</h3>
@@ -207,20 +271,23 @@
           </div>
         </section>
         
+        <!-- 3. INVENTORY VIEW -->
         <section id="inventory-view" class="view-panel">
           <div class="inventory-actions">
+            <!-- Filter tabs -->
             <div class="filter-group">
-              <button class="filter-btn active" data-filter="all" onclick="filterInventory('all', this)">All Items</button>
-              <button class="filter-btn" data-filter="yarn" onclick="filterInventory('yarn', this)">Yarns</button>
-              <button class="filter-btn" data-filter="fabric" onclick="filterInventory('fabric', this)">Fabrics</button>
-              <button class="filter-btn" data-filter="dye" onclick="filterInventory('dye', this)">Dyes</button>
-              <button class="filter-btn" data-filter="accessories" onclick="filterInventory('accessories', this)">Trims</button>
+              <button class="filter-btn active" data-filter="all">All Items</button>
+              <button class="filter-btn" data-filter="yarn">Yarns</button>
+              <button class="filter-btn" data-filter="fabric">Fabrics</button>
+              <button class="filter-btn" data-filter="dye">Dyes</button>
+              <button class="filter-btn" data-filter="accessories">Trims & Accessories</button>
             </div>
             
+            <!-- Actions -->
             <div style="display: flex; gap: 12px;">
               <div class="search-input-wrapper" style="width: 250px;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" class="input-field" id="inventory-search" placeholder="Search material catalog..." oninput="searchInventory(this.value)">
+                <input type="text" class="input-field" id="inventory-search" placeholder="Search material catalog...">
               </div>
               <button class="btn btn-primary" onclick="openAddNewMaterialModal()">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -229,7 +296,9 @@
             </div>
           </div>
           
+          <!-- Inventory Dashboard Grid -->
           <div class="grid-2">
+            <!-- Left: Table -->
             <div class="card" style="padding: 0; overflow: hidden;">
               <div class="table-container">
                 <table class="app-table">
@@ -244,11 +313,13 @@
                     </tr>
                   </thead>
                   <tbody id="inventory-table-body">
-                    </tbody>
+                    <!-- Dynamically populated inventory rows -->
+                  </tbody>
                 </table>
               </div>
             </div>
             
+            <!-- Right: Interactive SVG Analytics -->
             <div style="display: flex; flex-direction: column; gap: 24px;">
               <div class="card">
                 <div class="card-title-bar">
@@ -256,7 +327,8 @@
                   <span style="font-size: 11px; color: var(--text-muted)">Units vs Safety Thresholds</span>
                 </div>
                 <div id="inventory-bar-chart" class="chart-container">
-                  </div>
+                  <!-- SVG Bar Chart -->
+                </div>
               </div>
               
               <div class="card">
@@ -265,14 +337,17 @@
                   <span style="font-size: 11px; color: var(--text-muted)">Volume distribution</span>
                 </div>
                 <div id="inventory-pie-chart" class="chart-container">
-                  </div>
+                  <!-- SVG Donut Chart -->
+                </div>
               </div>
             </div>
           </div>
         </section>
         
+        <!-- 4. LOGISTICS VIEW -->
         <section id="logistics-view" class="view-panel">
           <div class="logistics-grid">
+            <!-- Left Side: Interactive SVG shipping map and list -->
             <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
               <div class="card shipments-map-card">
                 <div class="card-title-bar">
@@ -280,7 +355,8 @@
                   <span style="font-size: 11px; color: var(--text-muted)">Live intercontinental coordinates</span>
                 </div>
                 <div id="shipments-map-container" style="flex-grow: 1; min-height: 250px;">
-                  </div>
+                  <!-- Dynamically populated SVG route map -->
+                </div>
               </div>
               
               <div class="card" style="flex-grow: 1; display: flex; flex-direction: column; min-height: 180px;">
@@ -288,137 +364,489 @@
                   <h3>📦 Active Cargo Register</h3>
                 </div>
                 <div id="shipments-list-panel" style="overflow-y: auto; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; max-height: 200px; padding-right: 6px;">
-                  </div>
+                  <!-- Shipments selection panel -->
+                </div>
               </div>
             </div>
             
+            <!-- Right Side: Timeline and mitigation triggers -->
             <div class="card shipment-detail-card" id="shipment-details-panel">
-              </div>
+              <!-- Dynamically populated shipment details and log tracks -->
+            </div>
           </div>
         </section>
-
-        <section id="leave-view" class="view-panel">
-          <div class="section-header-bar">
-            <div>
-              <h2>Staff Leave & Absences Registry</h2>
-              <p>Monitor real-time workflow availability and evaluate <strong>leave frequencies</strong>.</p>
+        
+        <!-- 5. AI ASSISTANT VIEW -->
+        <section id="ai-view" class="view-panel">
+          <div class="ai-view-container">
+            <!-- Chat Pane -->
+            <div class="chat-panel">
+              <div class="chat-header-bar">
+                <div class="chat-ai-avatar">🤖</div>
+                <div class="chat-ai-status">
+                  <h4>Textile Intelligence AI Core</h4>
+                  <p>Context Integrated</p>
+                </div>
+              </div>
+              
+              <div class="chat-messages-thread" id="ai-chat-thread">
+                <!-- Dynamically populated chat dialogue -->
+              </div>
+              
+              <div class="chat-input-bar">
+                <input type="text" id="ai-chat-input" placeholder="Ask details (e.g. 'Are we low on dyes?', 'Is there a delay on TX-908?')...">
+                <button class="btn btn-primary" id="ai-send-btn" style="background-color: var(--accent-ai); border-color: var(--accent-ai)">Send</button>
+              </div>
             </div>
-            <button class="btn btn-leave" onclick="openModal('leave-modal')">Log New Leave Request</button>
+            
+            <!-- Prompt Suggestions Sidebar -->
+            <div class="card chat-sidebar-card">
+              <h3>💡 Quick Inquiries</h3>
+              <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 16px;">Test the AI agent's contextual awareness of inventory status, shipping delays, and compliance RAG specs:</p>
+              
+              <div class="prompt-suggestions">
+                <button class="prompt-btn" onclick="sendSuggestedPrompt('Which materials are currently running low on stock?')">
+                  🔍 Check low stock materials
+                </button>
+                <button class="prompt-btn" onclick="sendSuggestedPrompt('Does the Indigo Dye delay in Hamburg affect our production?')">
+                  🚢 Analyze Hamburg port delay impact
+                </button>
+                <button class="prompt-btn" onclick="sendSuggestedPrompt('What does OEKO-TEX Standard 100 say about lead and heavy metal limits?')">
+                  📚 Query OEKO-TEX lead limits (RAG)
+                </button>
+                <button class="prompt-btn" onclick="sendSuggestedPrompt('What are GOTS wastewater and pH discharge requirements?')">
+                  📚 GOTS environmental rules (RAG)
+                </button>
+              </div>
+            </div>
           </div>
-
-          <div class="grid-1">
-            <div class="card" style="padding: 0; overflow: hidden;">
-              <div class="table-container">
+        </section>
+        
+        <!-- 6. HR & LEAVE VIEW -->
+        <section id="hr-view" class="view-panel">
+          <div class="hr-layout">
+            <!-- Left: Employee Leave Selector -->
+            <div style="display:flex; flex-direction:column; gap:20px;">
+              <div class="card">
+                <div class="card-title-bar">
+                  <h3>👤 Employee Leave Frequency</h3>
+                  <select id="leave-employee-select" class="input-field" style="width:180px; padding:6px 10px; font-size:12px;" onchange="renderLeaveProfile()">
+                    <!-- populated by JS -->
+                  </select>
+                </div>
+                <div id="leave-profile-section">
+                  <!-- Leave frequency bars rendered by JS -->
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-title-bar">
+                  <h3>📅 Log New Leave</h3>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:12px; padding-top:8px;">
+                  <div class="form-group">
+                    <label>Employee</label>
+                    <select id="new-leave-emp" class="input-field"></select>
+                  </div>
+                  <div class="form-group">
+                    <label>Leave Type</label>
+                    <select id="new-leave-type" class="input-field">
+                      <option value="Sick">Sick Leave</option>
+                      <option value="Casual">Casual Leave</option>
+                      <option value="Annual">Annual Leave</option>
+                      <option value="Emergency">Emergency Leave</option>
+                      <option value="Maternity">Maternity/Paternity</option>
+                    </select>
+                  </div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div class="form-group">
+                      <label>From Date</label>
+                      <input type="date" id="new-leave-from" class="input-field">
+                    </div>
+                    <div class="form-group">
+                      <label>To Date</label>
+                      <input type="date" id="new-leave-to" class="input-field">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Reason</label>
+                    <input type="text" id="new-leave-reason" class="input-field" placeholder="Brief reason...">
+                  </div>
+                  <button class="btn btn-primary" onclick="logNewLeave()">Log Leave</button>
+                </div>
+              </div>
+            </div>
+            <!-- Right: Leave History Table -->
+            <div class="card" style="padding:0; overflow:hidden; display:flex; flex-direction:column;">
+              <div class="card-title-bar" style="padding:16px 20px;">
+                <h3>📋 Leave History — All Employees</h3>
+                <button class="btn btn-sm" onclick="exportLeaveCSV()">Export CSV</button>
+              </div>
+              <div class="table-container" style="flex:1; overflow-y:auto;">
                 <table class="app-table">
                   <thead>
                     <tr>
-                      <th>Employee Name</th>
-                      <th>Department</th>
-                      <th>Leave Window</th>
-                      <th>Duration</th>
-                      <th>Leave Frequency Tally</th>
-                      <th>Status</th>
-                      <th>Actions</th>
+                      <th>Employee</th>
+                      <th>Type</th>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Days</th>
+                      <th>Reason</th>
                     </tr>
                   </thead>
-                  <tbody id="leave-table-body">
-                    </tbody>
+                  <tbody id="leave-table-body"></tbody>
                 </table>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="kaizen-view" class="view-panel">
-          <div class="section-header-bar">
-            <div>
-              <h2>Industrial 5S Kaizen Workspace</h2>
-              <p>Continuous workspace refinements: Sort, Set In Order, Shine, Standardize, and Sustain.</p>
-            </div>
-            <button class="btn btn-kaizen" onclick="openModal('kaizen-modal')">Propose 5S Kaizen</button>
-          </div>
-
-          <div class="kaizen-grid" id="kaizen-cards-container">
-            </div>
-        </section>
-
+        <!-- 7. ANNOUNCEMENTS VIEW -->
         <section id="announcements-view" class="view-panel">
-          <div class="announcement-layout">
-            <div class="card">
-              <h3>📢 Publish Announcement Broadcast</h3>
-              <form id="announcement-form" onsubmit="createNewAnnouncement(event)" style="margin-top: 15px; display:flex; flex-direction:column; gap:12px;">
+          <div class="announce-layout">
+            <!-- Left: Create Announcement -->
+            <div class="card" style="align-self:start;">
+              <div class="card-title-bar">
+                <h3>📢 New Announcement</h3>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:12px; padding-top:8px;">
                 <div class="form-group">
-                  <label for="announce-title">Announcement Topic</label>
-                  <input type="text" id="announce-title" class="input-field" placeholder="e.g., Boiler Maintenance Scheduling" required>
+                  <label>Title</label>
+                  <input type="text" id="ann-title" class="input-field" placeholder="Announcement title...">
                 </div>
                 <div class="form-group">
-                  <label for="announce-body">Detailed Scope Description</label>
-                  <textarea id="announce-body" class="input-field" style="height: 80px; resize: none;" placeholder="Provide operational directives..." required></textarea>
+                  <label>Message</label>
+                  <textarea id="ann-body" class="input-field" rows="4" style="resize:vertical;" placeholder="Write announcement details here..."></textarea>
                 </div>
-                
                 <div class="form-group">
-                  <label>Document Attachments (Technical Specs/Manuals)</label>
-                  <div class="file-upload-zone">
-                    <input type="file" id="announce-file" class="file-hidden-input" onchange="handleAnnouncementFileSelect(this)">
-                    <button type="button" class="btn btn-sm btn-outline" onclick="document.getElementById('announce-file').click()">Choose File Attachment</button>
-                    <span class="file-status-label" id="file-upload-status">No attachment uploaded</span>
+                  <label>Priority</label>
+                  <select id="ann-priority" class="input-field">
+                    <option value="normal">Normal</option>
+                    <option value="important">Important</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Follow-up Reminder Date</label>
+                  <input type="date" id="ann-reminder-date" class="input-field">
+                </div>
+                <div class="form-group">
+                  <label>Attach File</label>
+                  <div class="file-upload-zone" id="ann-file-zone" onclick="document.getElementById('ann-file-input').click()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span id="ann-file-label">Click to attach a file</span>
+                    <input type="file" id="ann-file-input" style="display:none;" onchange="handleAnnFileSelect(event)">
                   </div>
                 </div>
-
-                <div class="toggle-container">
-                  <input type="checkbox" id="announce-reminder-toggle" checked>
-                  <label for="announce-reminder-toggle">Activate Automated Follow-up Reminder flag</label>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="background-color: var(--accent-announcement); border-color: var(--accent-announcement)">Publish Broadcast</button>
-              </form>
+                <button class="btn btn-primary" onclick="postAnnouncement()">Post Announcement</button>
+              </div>
             </div>
-
-            <div class="card" style="display:flex; flex-direction:column;">
-              <h3>Live Broadcast Feed & Response Loops</h3>
-              <div class="announcement-feed" id="announcements-feed-container" style="margin-top:15px; flex-grow:1; display:flex; flex-direction:column; gap:15px;">
+            <!-- Right: Announcements Feed -->
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="font-size:15px;">Announcements Feed</h3>
+                <div style="display:flex; gap:8px;">
+                  <button class="btn btn-sm ann-filter-btn active" data-filter="all" onclick="filterAnnouncements('all', this)">All</button>
+                  <button class="btn btn-sm ann-filter-btn" data-filter="urgent" onclick="filterAnnouncements('urgent', this)">Urgent</button>
+                  <button class="btn btn-sm ann-filter-btn" data-filter="important" onclick="filterAnnouncements('important', this)">Important</button>
+                  <button class="btn btn-sm ann-filter-btn" data-filter="pending-followup" onclick="filterAnnouncements('pending-followup', this)">Pending Follow-up</button>
                 </div>
+              </div>
+              <div id="announcements-feed" style="display:flex; flex-direction:column; gap:12px;">
+                <!-- populated by JS -->
+              </div>
             </div>
           </div>
         </section>
-        
-        <section id="ai-view" class="view-panel">
-          <div class="ai-view-container">
-            <div class="chat-panel">
-              <div class="chat-header-bar">
-                <div class="chat-ai-avatar">🤖</div>
-                <div class="chat-ai-status">
-                  <h4>Textile Intelligence AI Core</h4>
-                  <p>Context Integrated (PLM, Logistics, 5S & Frequencies)</p>
+
+        <!-- 9. MEETINGS VIEW -->
+        <section id="meetings-view" class="view-panel">
+          <div class="meetings-layout">
+            <!-- Left: New Meeting + Upcoming -->
+            <div style="display:flex;flex-direction:column;gap:20px;">
+              <div class="card">
+                <div class="card-title-bar"><h3>📅 Schedule Meeting</h3></div>
+                <div style="display:flex;flex-direction:column;gap:12px;padding-top:8px;">
+                  <div class="form-group"><label>Meeting Title</label><input type="text" id="mtg-title" class="input-field" placeholder="e.g. Q3 Production Review"></div>
+                  <div class="form-group"><label>Date & Time</label><input type="datetime-local" id="mtg-datetime" class="input-field"></div>
+                  <div class="form-group"><label>Location / Platform</label><input type="text" id="mtg-location" class="input-field" placeholder="Conference Room A / Teams"></div>
+                  <div class="form-group">
+                    <label>Attendees (comma-separated)</label>
+                    <input type="text" id="mtg-attendees" class="input-field" placeholder="Pravan M., Sarah J., Marcus V.">
+                  </div>
+                  <div class="form-group"><label>Agenda</label><textarea id="mtg-agenda" class="input-field" rows="3" style="resize:vertical;" placeholder="Discuss production targets, review delays..."></textarea></div>
+                  <button class="btn btn-primary" onclick="scheduleMeeting()">Schedule Meeting</button>
                 </div>
               </div>
-              
-              <div class="chat-messages-thread" id="ai-chat-thread">
-                </div>
-              
-              <div class="chat-input-bar">
-                <input type="text" id="ai-chat-input" placeholder="Ask details (e.g. 'Who is on leave?', 'Are there pending 5S tasks?')...">
-                <button class="btn btn-primary" id="ai-send-btn" style="background-color: var(--accent-ai); border-color: var(--accent-ai)" onclick="handleAiChatSubmit()">Send</button>
+
+              <!-- Meeting Stats -->
+              <div class="card">
+                <div class="card-title-bar"><h3>📊 Meeting Summary</h3></div>
+                <div id="meeting-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:8px;"></div>
               </div>
             </div>
-            
-            <div class="card chat-sidebar-card">
-              <h3>💡 Operational Insights Queries</h3>
-              <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 16px;">Test compliance indexes, or review leave frequencies and 5S kaizens:</p>
-              
-              <div class="prompt-suggestions">
-                <button class="prompt-btn" onclick="sendSuggestedPrompt('Analyze leave frequency levels among production personnel')">
-                  🔍 Check Leave Frequencies
-                </button>
-                <button class="prompt-btn" onclick="sendSuggestedPrompt('Summarize all pending 5S Kaizen improvements')">
-                  🔧 Summary of 5S Kaizens
-                </button>
-                <button class="prompt-btn" onclick="sendSuggestedPrompt('What announcements require a dynamic follow up reminder?')">
-                  📢 Check Announcement Follow-ups
-                </button>
-                <button class="prompt-btn" onclick="sendSuggestedPrompt('What does OEKO-TEX Standard 100 say about lead and heavy metal limits?')">
-                  📚 Query OEKO-TEX lead limits (RAG)
-                </button>
+
+            <!-- Right: Meeting List & Detail -->
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="font-size:15px;">Meetings & Action Items</h3>
+                <div style="display:flex;gap:8px;">
+                  <button class="btn btn-sm mtg-filter-btn active" onclick="filterMeetings('all',this)">All</button>
+                  <button class="btn btn-sm mtg-filter-btn" onclick="filterMeetings('upcoming',this)">Upcoming</button>
+                  <button class="btn btn-sm mtg-filter-btn" onclick="filterMeetings('pending-actions',this)">Pending Actions</button>
+                  <button class="btn btn-sm mtg-filter-btn" onclick="filterMeetings('completed',this)">Completed</button>
+                </div>
+              </div>
+              <div id="meetings-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. COMPLIANCE VIEW -->
+        <section id="compliance-view" class="view-panel">
+          <div class="compliance-layout">
+            <!-- Top: Risk Score Cards -->
+            <div class="grid-4">
+              <div class="card stat-card" style="border-top:2px solid var(--status-danger);">
+                <div class="stat-header"><span>Critical Risk</span></div>
+                <div class="stat-value" id="comp-critical-count" style="color:var(--status-danger)">0</div>
+                <div class="stat-desc">Immediate escalation needed</div>
+              </div>
+              <div class="card stat-card" style="border-top:2px solid var(--status-warning);">
+                <div class="stat-header"><span>High Risk</span></div>
+                <div class="stat-value" id="comp-high-count" style="color:var(--status-warning)">0</div>
+                <div class="stat-desc">Action within 48h</div>
+              </div>
+              <div class="card stat-card" style="border-top:2px solid #6366f1;">
+                <div class="stat-header"><span>Medium Risk</span></div>
+                <div class="stat-value" id="comp-medium-count" style="color:#6366f1">0</div>
+                <div class="stat-desc">Monitor closely</div>
+              </div>
+              <div class="card stat-card" style="border-top:2px solid var(--status-success);">
+                <div class="stat-header"><span>Resolved</span></div>
+                <div class="stat-value" id="comp-resolved-count" style="color:var(--status-success)">0</div>
+                <div class="stat-desc">Closed compliance items</div>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <!-- Left: Compliance Table -->
+              <div style="display:flex;flex-direction:column;gap:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <h3 style="font-size:15px;">Compliance Issues</h3>
+                  <div style="display:flex;gap:8px;">
+                    <button class="btn btn-sm comp-filter active" onclick="filterCompliance('all',this)">All</button>
+                    <button class="btn btn-sm comp-filter" onclick="filterCompliance('critical',this)">Critical</button>
+                    <button class="btn btn-sm comp-filter" onclick="filterCompliance('overdue',this)">Overdue</button>
+                    <button class="btn btn-sm comp-filter" onclick="filterCompliance('escalated',this)">Escalated</button>
+                  </div>
+                </div>
+                <div id="compliance-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+              </div>
+
+              <!-- Right: Log New + Risk Chart -->
+              <div style="display:flex;flex-direction:column;gap:20px;">
+                <div class="card">
+                  <div class="card-title-bar"><h3>➕ Log Compliance Issue</h3></div>
+                  <div style="display:flex;flex-direction:column;gap:12px;padding-top:8px;">
+                    <div class="form-group"><label>Issue Title</label><input type="text" id="comp-title" class="input-field" placeholder="e.g. pH level out of range in Dyeing Unit 3"></div>
+                    <div class="form-group">
+                      <label>Category</label>
+                      <select id="comp-category" class="input-field">
+                        <option value="Chemical">Chemical Safety</option>
+                        <option value="Environmental">Environmental</option>
+                        <option value="Labor">Labor Standards</option>
+                        <option value="Quality">Quality Control</option>
+                        <option value="Fire">Fire & Safety</option>
+                        <option value="Data">Data & Documentation</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Risk Level</label>
+                      <select id="comp-risk" class="input-field">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                      </select>
+                    </div>
+                    <div class="form-group"><label>Due Date</label><input type="date" id="comp-due" class="input-field"></div>
+                    <div class="form-group"><label>Assigned To</label><input type="text" id="comp-owner" class="input-field" placeholder="Department / Person"></div>
+                    <div class="form-group"><label>Description</label><textarea id="comp-desc" class="input-field" rows="2" style="resize:vertical;"></textarea></div>
+                    <button class="btn btn-primary" onclick="logComplianceIssue()">Log Issue</button>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-title-bar"><h3>📊 Risk Distribution</h3></div>
+                  <div id="compliance-risk-chart" style="padding-top:8px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 11. COMPLAINTS VIEW -->
+        <section id="complaints-view" class="view-panel">
+          <div class="complaints-layout">
+            <!-- Stats Row -->
+            <div class="grid-4">
+              <div class="card stat-card" style="border-top:2px solid var(--status-danger);">
+                <div class="stat-header"><span>Open Complaints</span></div>
+                <div class="stat-value" id="cmpl-open-count">0</div>
+                <div class="stat-desc">Awaiting resolution</div>
+              </div>
+              <div class="card stat-card" style="border-top:2px solid var(--accent-log);">
+                <div class="stat-header"><span>Recurring Issues</span></div>
+                <div class="stat-value" id="cmpl-recurring-count" style="color:var(--accent-log)">0</div>
+                <div class="stat-desc">Reported 2+ times</div>
+              </div>
+              <div class="card stat-card" style="border-top:2px solid var(--accent-inv);">
+                <div class="stat-header"><span>Top Category</span></div>
+                <div class="stat-value" id="cmpl-top-category" style="font-size:16px;">—</div>
+                <div class="stat-desc">Most frequent issue type</div>
+              </div>
+              <div class="card stat-card" style="border-top:2px solid var(--status-success);">
+                <div class="stat-header"><span>Resolved This Month</span></div>
+                <div class="stat-value" id="cmpl-resolved-count" style="color:var(--status-success)">0</div>
+                <div class="stat-desc">Successfully closed</div>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <!-- Left column: Trend Chart + List -->
+              <div style="display:flex;flex-direction:column;gap:16px;">
+                <div class="card">
+                  <div class="card-title-bar"><h3>📈 Complaint Trend (6 Months)</h3></div>
+                  <div id="complaints-trend-chart" style="padding-top:8px;"></div>
+                </div>
+                <div class="card" style="padding:0;overflow:hidden;">
+                  <div class="card-title-bar" style="padding:16px 20px;">
+                    <h3>Root Cause Analysis</h3>
+                    <div style="display:flex;gap:6px;">
+                      <button class="btn btn-sm cmpl-filter active" onclick="filterComplaints('all',this)">All</button>
+                      <button class="btn btn-sm cmpl-filter" onclick="filterComplaints('open',this)">Open</button>
+                      <button class="btn btn-sm cmpl-filter" onclick="filterComplaints('recurring',this)">Recurring</button>
+                    </div>
+                  </div>
+                  <div id="complaints-list" style="display:flex;flex-direction:column;gap:0;"></div>
+                </div>
+              </div>
+
+              <!-- Right column: Category breakdown + Log form -->
+              <div style="display:flex;flex-direction:column;gap:20px;">
+                <div class="card">
+                  <div class="card-title-bar"><h3>📊 Category Breakdown</h3></div>
+                  <div id="complaints-category-chart" style="padding-top:8px;"></div>
+                </div>
+                <div class="card">
+                  <div class="card-title-bar"><h3>📝 Log New Complaint</h3></div>
+                  <div style="display:flex;flex-direction:column;gap:12px;padding-top:8px;">
+                    <div class="form-group"><label>Complaint Title</label><input type="text" id="cmpl-title" class="input-field" placeholder="Brief description..."></div>
+                    <div class="form-group">
+                      <label>Category</label>
+                      <select id="cmpl-category" class="input-field">
+                        <option value="Quality">Quality Defect</option>
+                        <option value="Delivery">Late Delivery</option>
+                        <option value="Supplier">Supplier Issue</option>
+                        <option value="Safety">Safety Hazard</option>
+                        <option value="Process">Process Failure</option>
+                        <option value="Communication">Communication Gap</option>
+                        <option value="Equipment">Equipment Failure</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Severity</label>
+                      <select id="cmpl-severity" class="input-field">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                      </select>
+                    </div>
+                    <div class="form-group"><label>Reported By</label><input type="text" id="cmpl-reporter" class="input-field" placeholder="Name / Department"></div>
+                    <div class="form-group"><label>Root Cause (if known)</label><input type="text" id="cmpl-cause" class="input-field" placeholder="e.g. Machine calibration drift..."></div>
+                    <div class="form-group"><label>Description</label><textarea id="cmpl-desc" class="input-field" rows="2" style="resize:vertical;"></textarea></div>
+                    <button class="btn btn-primary" onclick="logComplaint()">Submit Complaint</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8. KAIZEN 5S VIEW -->
+        <section id="kaizen-view" class="view-panel">
+          <div class="kaizen-layout">
+            <!-- Stats Row -->
+            <div class="grid-3" style="margin-bottom:0;">
+              <div class="card stat-card" style="border-top: 2px solid #10b981;">
+                <div class="stat-header"><span>Open Kaizens</span></div>
+                <div class="stat-value" id="kaizen-open-count">0</div>
+                <div class="stat-desc">Improvements in progress</div>
+              </div>
+              <div class="card stat-card" style="border-top: 2px solid #f59e0b;">
+                <div class="stat-header"><span>Completed</span></div>
+                <div class="stat-value" id="kaizen-done-count">0</div>
+                <div class="stat-desc">Improvements done</div>
+              </div>
+              <div class="card stat-card" style="border-top: 2px solid #6366f1;">
+                <div class="stat-header"><span>5S Score</span></div>
+                <div class="stat-value" id="kaizen-5s-score">--</div>
+                <div class="stat-desc">Based on completed items</div>
+              </div>
+            </div>
+
+            <!-- Board + Form -->
+            <div class="grid-2">
+              <!-- Kaizen Board -->
+              <div style="display:flex; flex-direction:column; gap:16px;">
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                  <button class="btn btn-sm kaizen-filter active" data-s="all" onclick="filterKaizen('all',this)">All</button>
+                  <button class="btn btn-sm kaizen-filter" data-s="Sort" onclick="filterKaizen('Sort',this)">1S – Sort</button>
+                  <button class="btn btn-sm kaizen-filter" data-s="Set in Order" onclick="filterKaizen('Set in Order',this)">2S – Set in Order</button>
+                  <button class="btn btn-sm kaizen-filter" data-s="Shine" onclick="filterKaizen('Shine',this)">3S – Shine</button>
+                  <button class="btn btn-sm kaizen-filter" data-s="Standardize" onclick="filterKaizen('Standardize',this)">4S – Standardize</button>
+                  <button class="btn btn-sm kaizen-filter" data-s="Sustain" onclick="filterKaizen('Sustain',this)">5S – Sustain</button>
+                </div>
+                <div id="kaizen-cards-container" style="display:flex; flex-direction:column; gap:12px; max-height:600px; overflow-y:auto; padding-right:4px;">
+                  <!-- Kaizen cards by JS -->
+                </div>
+              </div>
+              <!-- Log New Kaizen -->
+              <div class="card" style="align-self:start;">
+                <div class="card-title-bar"><h3>➕ Log New Kaizen</h3></div>
+                <div style="display:flex; flex-direction:column; gap:12px; padding-top:8px;">
+                  <div class="form-group">
+                    <label>Title / Issue</label>
+                    <input type="text" id="kz-title" class="input-field" placeholder="e.g. Yarn trolley blocking exit aisle">
+                  </div>
+                  <div class="form-group">
+                    <label>5S Category</label>
+                    <select id="kz-category" class="input-field">
+                      <option value="Sort">1S – Sort (Remove unnecessary items)</option>
+                      <option value="Set in Order">2S – Set in Order (Arrange for efficiency)</option>
+                      <option value="Shine">3S – Shine (Clean & inspect)</option>
+                      <option value="Standardize">4S – Standardize (Create procedures)</option>
+                      <option value="Sustain">5S – Sustain (Maintain discipline)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Location / Area</label>
+                    <input type="text" id="kz-location" class="input-field" placeholder="e.g. Warehouse A, Dyeing Floor">
+                  </div>
+                  <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="kz-desc" class="input-field" rows="3" style="resize:vertical;" placeholder="Describe the issue and proposed improvement..."></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>Assigned To</label>
+                    <input type="text" id="kz-assignee" class="input-field" placeholder="Name or team...">
+                  </div>
+                  <div class="form-group">
+                    <label>Target Date</label>
+                    <input type="date" id="kz-target-date" class="input-field">
+                  </div>
+                  <button class="btn btn-primary" onclick="logKaizen()">Submit Kaizen</button>
+                </div>
               </div>
             </div>
           </div>
@@ -427,126 +855,37 @@
       </div>
     </main>
   </div>
+
+  <!-- NOTIFICATION DRAWER -->
+  <div class="notif-drawer" id="notif-drawer">
+    <div class="notif-drawer-header">
+      <h3>🔔 Pending Reminders</h3>
+      <button onclick="toggleNotifPanel()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;">✕</button>
+    </div>
+    <div id="notif-list" style="display:flex; flex-direction:column; gap:10px; overflow-y:auto; max-height:calc(100vh - 80px); padding-bottom:24px;">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+  <div class="notif-overlay" id="notif-overlay" onclick="toggleNotifPanel()"></div>
   
+  <!-- INVENTORY EDIT MODAL OVERLAY -->
   <div class="modal-overlay" id="inventory-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Adjust Inventory Quantity</h3>
-        <button class="modal-close" onclick="closeModal('inventory-modal')">✕</button>
+        <button class="modal-close" onclick="closeStockModal()">✕</button>
       </div>
       <div class="modal-body">
         <h4 id="modal-item-name" style="font-size: 14px; margin-bottom: 16px; color: var(--text-main)">Material Name</h4>
         <div class="form-group">
           <label for="edit-stock-qty">Physical Stock Count</label>
-          <input type="number" id="edit-stock-qty" min="0" class="input-field">
+          <input type="number" id="edit-stock-qty" min="0">
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn" onclick="closeModal('inventory-modal')">Cancel</button>
+        <button class="btn" onclick="closeStockModal()">Cancel</button>
         <button class="btn btn-primary" onclick="saveStockEdit()">Save Changes</button>
       </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="leave-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Submit New Leave Request Form</h3>
-        <button class="modal-close" onclick="closeModal('leave-modal')">✕</button>
-      </div>
-      <form id="leave-form" onsubmit="submitNewLeave(event)">
-        <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
-          <div class="form-group">
-            <label for="leave-emp-name">Employee Full Name</label>
-            <input type="text" id="leave-emp-name" class="input-field" placeholder="e.g. Lin Woods" required>
-          </div>
-          <div class="form-group">
-            <label for="leave-dept">Target Department</label>
-            <select id="leave-dept" class="input-field">
-              <option value="Weaving Yard">Weaving Yard</option>
-              <option value="Dyeing House">Dyeing House</option>
-              <option value="Finishing Line">Finishing Line</option>
-              <option value="Logistics Hub">Logistics Hub</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="leave-range">Leave Timeline Range</label>
-            <input type="text" id="leave-range" class="input-field" placeholder="e.g. June 22 - June 25" required>
-          </div>
-          <div class="form-group">
-            <label for="leave-days">Total Duration (Days)</label>
-            <input type="number" id="leave-days" class="input-field" min="1" max="30" value="3" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn" onclick="closeModal('leave-modal')">Cancel</button>
-          <button type="submit" class="btn btn-leave">File Request</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="kaizen-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Propose 5S Continuous Kaizen</h3>
-        <button class="modal-close" onclick="closeModal('kaizen-modal')">✕</button>
-      </div>
-      <form id="kaizen-form" onsubmit="submitNewKaizen(event)">
-        <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
-          <div class="form-group">
-            <label for="kaizen-title">Kaizen Target Objective</label>
-            <input type="text" id="kaizen-title" class="input-field" placeholder="e.g. Standardizing Loom Cleanliness Toolkits" required>
-          </div>
-          <div class="form-group">
-            <label for="kaizen-pillar">5S Classification Pillar</label>
-            <select id="kaizen-pillar" class="input-field">
-              <option value="Sort (Seiri)">Sort (Seiri)</option>
-              <option value="Set in order (Seiton)">Set in order (Seiton)</option>
-              <option value="Shine (Seiso)">Shine (Seiso)</option>
-              <option value="Standardize (Seiketsu)">Standardize (Seiketsu)</option>
-              <option value="Sustain (Shitsuke)">Sustain (Shitsuke)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="kaizen-location">Shopfloor Zone Location</label>
-            <input type="text" id="kaizen-location" class="input-field" placeholder="e.g. Line B Knitted Weaving" required>
-          </div>
-          <div class="form-group">
-            <label for="kaizen-details">Action Plan Details</label>
-            <textarea id="kaizen-details" class="input-field" style="height:60px; resize:none;" placeholder="Describe current waste and 5S mitigation solution..." required></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn" onclick="closeModal('kaizen-modal')">Cancel</button>
-          <button type="submit" class="btn btn-kaizen">Log Proposal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="project-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Initialize PLM Garment Project</h3>
-        <button class="modal-close" onclick="closeModal('project-modal')">✕</button>
-      </div>
-      <form id="project-form" onsubmit="submitNewProject(event)">
-        <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
-          <div class="form-group">
-            <label for="proj-name">Garment Blueprint Name</label>
-            <input type="text" id="proj-name" class="input-field" placeholder="e.g. Hyper-Breathable Technical Jacket" required>
-          </div>
-          <div class="form-group">
-            <label for="proj-season">Target Season Collection</label>
-            <input type="text" id="proj-season" class="input-field" placeholder="e.g. Winter 2026 Active" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn" onclick="closeModal('project-modal')">Cancel</button>
-          <button type="submit" class="btn btn-teal">Create Workflow</button>
-        </div>
-      </form>
     </div>
   </div>
 
